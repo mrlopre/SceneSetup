@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diriyah</title>
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+  <!-- Left Panel -->
+  <div id="panel">
+    <div id="tabs">
+      <button class="tab active" data-tab="scene">S</button>
+      <button class="tab" data-tab="materials">M</button>
+      <button class="tab" data-tab="lighting">L</button>
+      <button class="tab" data-tab="postprocess">PP</button>
+    </div>
+    
+    <div id="menu-content">
+      <!-- Scene Menu -->
+    <div id="scene-menu" class="menu active">
+            <div class="section-title">Camera</div>
+              <div class="slider-row">
+                <label>FOV</label>
+                <input type="range" id="camera-fov" min="10" max="120" step="1" value="45">
+                <span class="value">45°</span>
+              </div>
+
+              <div style="border-bottom: 1px solid #555; margin: 0px 0;"></div>
+
+            <div style="padding-bottom: 10px; border-bottom: 1px solid #555; margin-bottom: 10px; margin-top: 15px;">
+              <button id="btn-import-glb" class="full-width-btn">Load GLB Model</button>
+              <input type="file" id="glb-file-input" accept=".glb,.gltf" style="display: none;">
+            </div>
+
+            <div class="section-title">Scene Outliner</div>
+        <div id="scene-tree"></div>
+      </div>
+      
+      <!-- Materials Menu -->
+      <div id="materials-menu" class="menu">
+        <div id="materials-browser">
+          <div class="section-title">Materials</div>
+          <div id="material-list"></div>
+        </div>
+        
+        <div id="material-inspector">
+          <div id="material-inspector-content">
+            <div class="inspector-empty">Select a material</div>
+          </div>
+        </div>
+        
+        <div id="texture-inspector">
+          <div id="texture-inspector-content"></div>
+        </div>
+      </div>
+      
+      <!-- Lighting Menu -->
+      <div id="lighting-menu" class="menu">
+        <div class="section-title">Environment</div>
+        <div class="slider-row">
+          <label>HDR Map</label>
+          <span id="hdr-filename" class="filename">BeachSunrise.hdr</span>
+          <button id="btn-load-hdr" class="file-btn">Load</button>
+        </div>
+        <input type="file" id="hdr-file-input" accept=".hdr" style="display: none;">
+        <div class="slider-row">
+          <label>HDR Intensity</label>
+          <input type="range" id="hdr-intensity" min="0" max="2" step="0.05" value="1">
+          <span class="value">1.00</span>
+        </div>
+        <div class="slider-row">
+          <label>HDR Rotation</label>
+          <input type="range" id="hdr-rotation" min="0" max="359" step="1" value="0">
+          <span class="value">0°</span>
+        </div>
+        <div class="slider-row">
+          <label>Use as Background</label>
+          <input type="checkbox" id="hdr-background">
+        </div>
+        
+        <div class="section-title">Ambient Light</div>
+        <div class="slider-row">
+          <label>Color</label>
+          <input type="color" id="ambient-color" value="#ffffff">
+        </div>
+        <div class="slider-row">
+          <label>Intensity</label>
+          <input type="range" id="ambient-intensity" min="0" max="3" step="0.05" value="1">
+          <span class="value">1.00</span>
+        </div>
+        
+        <div class="section-title">Directional Light</div>
+        <div class="slider-row">
+          <label>Color</label>
+          <input type="color" id="dir-color" value="#ffffff">
+        </div>
+        <div class="slider-row">
+          <label>Intensity</label>
+          <input type="range" id="dir-intensity" min="0" max="10" step="0.05" value="1">
+          <span class="value">1.00</span>
+        </div>
+        <div class="slider-row">
+          <label>Direction</label>
+          <input type="range" id="dir-direction" min="0" max="359" step="1" value="45">
+          <span class="value">45°</span>
+        </div>
+        <div class="slider-row">
+          <label>Elevation</label>
+          <input type="range" id="dir-elevation" min="5" max="90" step="1" value="60">
+          <span class="value">60°</span>
+        </div>
+        
+        <div class="section-title">Shadows</div>
+
+        <div class="slider-row">
+          <label>Enable</label>
+          <input type="checkbox" id="shadows-enabled" checked>
+        </div>
+        
+        <div class="slider-row">
+          <label>Type</label>
+          <select id="shadow-type">
+            <option value="0" selected>Basic</option>
+            <option value="1">PCF</option>
+            <option value="2">PCF Soft</option>
+            <option value="3">VSM</option>
+          </select>
+        </div>
+
+        <div class="slider-row">
+          <label>Bias</label>
+          <input type="range" id="shadow-bias" min="-0.005" max="0.005" step="0.0001" value="-0.0001">
+          <span class="value">-0.0001</span>
+        </div>
+
+        <div class="slider-row">
+          <label>Normal Bias</label>
+          <input type="range" id="shadow-normal-bias" min="0" max="0.5" step="0.01" value="0.05">
+          <span class="value">0.05</span>
+        </div>
+
+        <div class="slider-row">
+          <label>Map Size</label>
+          <select id="shadow-map-size">
+            <option value="512">512</option>
+            <option value="1024">1024</option>
+            <option value="2048" selected>2048</option>
+            <option value="4096">4096</option>
+          </select>
+        </div>
+        <div class="slider-row">
+          <label>Radius</label>
+          <input type="range" id="shadow-radius" min="0" max="10" step="0.1" value="1">
+          <span class="value">1.0</span>
+        </div>
+        <div class="slider-row">
+          <label>Camera Size</label>
+          <input type="range" id="shadow-camera-size" min="1" max="20" step="0.5" value="10">
+          <span class="value">10.0</span>
+        </div>
+      </div>
+      
+      <!-- Post Processing Menu -->
+      <div id="postprocess-menu" class="menu">
+
+        <div class="section-title">Tone Mapping</div>
+        <div class="slider-row">
+          <label>Type</label>
+          <select id="tone-mapping-type">
+            <option value="0">None</option>
+            <option value="1">Linear</option>
+            <option value="2">Reinhard</option>
+            <option value="3">Cineon</option>
+            <option value="4" selected>ACES Filmic</option>
+          </select>
+        </div>
+
+        <div class="slider-row">
+          <label>Exposure</label>
+          <input type="range" id="exposure" min="0" max="3" step="0.05" value="1">
+          <span class="value">1.00</span>
+        </div>
+        
+        <div class="section-title">Color Correction</div>
+        <div class="slider-row">
+          <label>Enable</label>
+          <input type="checkbox" id="color-correction-enabled">
+        </div>
+
+        <div class="slider-row">
+          <label>Saturation</label>
+          <input type="range" id="saturation" min="-1" max="0.5" step="0.01" value="0">
+          <span class="value">0.00</span>
+        </div>
+        <div class="slider-row">
+          <label>Contrast</label>
+          <input type="range" id="contrast" min="-0.2" max="0.2" step="0.01" value="0">
+          <span class="value">0.00</span>
+        </div>
+        <div class="slider-row">
+          <label>Brightness</label>
+          <input type="range" id="brightness" min="0" max="0.2" step="0.01" value="0">
+          <span class="value">0.00</span>
+        </div>
+        
+        <div class="section-title">Bloom</div>
+        <div class="slider-row">
+          <label>Enable</label>
+          <input type="checkbox" id="bloom-enabled">
+        </div>
+        <div class="slider-row">
+          <label>Intensity</label>
+          <input type="range" id="bloom-intensity" min="0" max="3" step="0.05" value="0.5">
+          <span class="value">0.50</span>
+        </div>
+        <div class="slider-row">
+          <label>Threshold</label>
+          <input type="range" id="bloom-threshold" min="0" max="1" step="0.05" value="0.8">
+          <span class="value">0.80</span>
+        </div>
+        <div class="slider-row">
+          <label>Radius</label>
+          <input type="range" id="bloom-radius" min="0" max="1" step="0.05" value="0.5">
+          <span class="value">0.50</span>
+        </div>
+      </div>
+    </div>
+    
+    <div id="settings-panel">
+      <div class="settings-grid">
+        <div class="grid-cell split">
+          <button id="btn-save">Save</button>
+          <button id="btn-load">Load</button>
+        </div>
+        <div class="grid-cell">
+          <button id="btn-export">Export</button>
+        </div>
+        <div class="grid-cell">
+          <button id="btn-copy-code">Copy Code</button>
+        </div>
+        <div class="grid-cell">
+          <button id="btn-import">Import</button>
+        </div>
+      </div>
+      <input type="file" id="import-file" accept=".json" style="display: none;">
+    </div>
+  
+  <canvas id="canvas"></canvas>
+
+  <div id="stats-overlay">
+    <div>Triangles: <span id="stat-triangles">0</span></div>
+    <div>Materials: <span id="stat-materials">0</span></div>
+    <div>Textures: <span id="stat-textures">0</span></div>
+    <div>Tex Memory: <span id="stat-texture-size">0</span> MB</div>
+    <div>Draw Calls: <span id="stat-drawcalls">0</span></div>
+    <div>Geometries: <span id="stat-geometries">0</span></div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,460 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow: hidden;
+  background: #1a1a2e;
+}
+
+/* Left Panel */
+#panel {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 15%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #2a2a3e;
+  z-index: 100;
+}
+
+/* Tabs */
+#tabs {
+  display: flex;
+  height: 5%;
+  min-height: 36px;
+}
+
+.tab {
+  flex: 1;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  color: white;
+  font-size: 14px;
+}
+
+.tab[data-tab="scene"] { background: #c0392b; }
+.tab[data-tab="materials"] { background: #2980b9; }
+.tab[data-tab="lighting"] { background: #8e44ad; }
+.tab[data-tab="postprocess"] { background: #16a085; }
+
+.tab.active { filter: brightness(1.3); }
+
+/* Menu Content */
+#menu-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  background: #3a3a4e;
+}
+
+.menu { display: none; }
+.menu.active { display: block; }
+
+
+/* UI Elements */
+.section-title {
+  color: #fff;
+  font-size: 12px;
+  margin: 10px 0 5px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #555;
+}
+
+.slider-row {
+  display: flex;
+  align-items: center;
+  margin: 8px 0;
+}
+
+.slider-row label {
+  color: #ccc;
+  font-size: 11px;
+  width: 100px;
+  flex-shrink: 0;
+}
+
+.slider-row input[type="range"] {
+  flex: 1;
+  margin: 0 8px;
+  max-width: 120px;
+}
+
+
+.slider-row input[type="color"] {
+  width: 120px;
+  height: 13px;
+  margin: 0 8px;
+  border: 1px solid #555;
+  border-radius: 3px;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.slider-row input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 2px;
+}
+
+.slider-row input[type="color"]::-webkit-color-swatch {
+  border: none;
+  border-radius: 2px;
+}
+
+.slider-row select {
+  flex: 1;
+  max-width: 120px;
+  padding: 3px;
+  background: #2a2a3e;
+  color: #fff;
+  border: 1px solid #555;
+  border-radius: 3px;
+  font-size: 11px;
+}
+
+.slider-row .value {
+  color: #fff;
+  font-size: 11px;
+  width: 40px;
+  text-align: right;
+}
+
+
+/* Scene Tree */
+.tree-item {
+  color: #ccc;
+  font-size: 11px;
+  padding: 3px 0;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tree-item:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.tree-item.mesh { color: #6cf; }
+.tree-item.group { color: #fc6; }
+.tree-item.light { color: #ff6; }
+
+.tree-toggle {
+  cursor: pointer;
+  user-select: none;
+  display: inline-block;
+  width: 12px;
+  color: #888;
+}
+
+.tree-children {
+  display: block;
+}
+
+.tree-children.collapsed {
+  display: none;
+}
+
+/* Material List */
+.material-item {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  margin: 3px 0;
+  background: rgba(0,0,0,0.2);
+  border-radius: 4px;
+}
+
+.material-swatch {
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  margin-right: 8px;
+  border: 1px solid #555;
+}
+
+.material-name {
+  color: #ccc;
+  font-size: 11px;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.material-size {
+  color: #888;
+  font-size: 10px;
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+
+/* Materials Menu Layout */
+#materials-menu.active {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+#materials-browser {
+  height: 50%;
+  overflow-y: auto;
+  border-bottom: 1px solid #555;
+}
+
+#material-inspector {
+  flex: 1;
+  overflow-y: auto;
+  border-bottom: 1px solid #555;
+}
+
+#texture-inspector {
+  width: 100%;
+  height: 15vw;
+  flex-shrink: 0;
+}
+
+#texture-inspector-content {
+  width: 100%;
+  height: 100%;
+  display: block;
+  line-height: 0;
+}
+
+#texture-inspector-content img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.inspector-header {
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 10px;
+}
+
+#material-inspector-content {
+  padding: 10px;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.inspector-empty {
+  color: #aaa;
+  font-size: 18px;
+  font-style: italic;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+#material-inspector-content {
+  height: 100%;
+}
+
+.inspector-row {
+  display: flex;
+  align-items: center;
+  margin: 6px 0;
+  font-size: 11px;
+}
+
+.inspector-row .label {
+  color: #fff;
+  width: 70px;
+  flex-shrink: 0;
+}
+
+.inspector-row .value {
+  color: #ccc;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.inspector-row .color-preview {
+  width: 16px;
+  height: 16px;
+  border: 1px solid #fff;
+  border-radius: 2px;
+  margin-right: 6px;
+  flex-shrink: 0;
+}
+
+.inspector-row .texture-link {
+  color: #8cf;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.inspector-row .texture-link:hover {
+  color: #aff;
+}
+
+
+.material-item {
+  cursor: pointer;
+}
+
+.material-item:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.material-item.selected {
+  background: rgba(41, 128, 185, 0.4);
+  border: 1px solid #2980b9;
+}
+
+/* Canvas */
+#canvas {
+  position: fixed;
+  left: 15%;
+  top: 0;
+  width: 85%;
+  height: 100%;
+}
+
+#stats-overlay {
+  position: fixed;
+  bottom: 10px;
+  left: 16%; /* 15% panel width + 1% margin */
+  color: white;
+  font-family: monospace;
+  font-size: 12px;
+  background: transparent;
+  pointer-events: none; /* Allows clicking through the text to the canvas */
+  text-shadow: 1px 1px 2px black; /* Makes white text readable on bright backgrounds */
+  line-height: 1.5;
+  z-index: 10;
+}
+
+/* Settings Panel */
+#settings-panel {
+  height: 10%;
+  min-height: 60px;
+  background: #1a1a2e;
+  border-top: 1px solid #555;
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  height: 100%;
+}
+
+.grid-cell {
+  display: flex;
+  border-right: 1px solid #555;
+  border-bottom: 1px solid #555;
+}
+
+.grid-cell:nth-child(2),
+.grid-cell:nth-child(4) {
+  border-right: none;
+}
+
+.grid-cell:nth-child(3),
+.grid-cell:nth-child(4) {
+  border-bottom: none;
+}
+
+.grid-cell.split {
+  flex-direction: row;
+}
+
+.grid-cell.split button {
+  flex: 1;
+}
+
+.grid-cell.split button:first-child {
+  border-right: 1px solid #555;
+}
+
+.grid-cell button {
+  flex: 1;
+  border: none;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: bold;
+  color: white;
+  transition: filter 0.2s;
+}
+
+.grid-cell button:hover {
+  filter: brightness(1.4);
+}
+
+#btn-save {
+  background: #262733;
+}
+
+#btn-load {
+  background: #262733;
+}
+
+#btn-copy-code {
+  background: #262733;
+}
+
+#btn-export {
+  background: #262733;
+}
+
+#btn-import {
+  background: #262733;
+}
+
+/* File button */
+
+.full-width-btn {
+  width: 100%;
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 12px;
+  transition: background 0.2s;
+}
+
+.full-width-btn:hover {
+  background: #2980b9;
+}
+
+.file-btn {
+  background: #4a4a5e;
+  color: white;
+  border: 1px solid #555;
+  border-radius: 3px;
+  padding: 3px 10px;
+  font-size: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.file-btn:hover {
+  background: #5a5a6e;
+}
+
+.filename {
+  color: #aaa;
+  font-size: 10px;
+  margin-left: 8px;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
